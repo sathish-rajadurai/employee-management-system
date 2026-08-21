@@ -3,8 +3,8 @@ spring:
     name: employee-management
   datasource:
     url: jdbc:postgresql://localhost:5432/practice
-    username: postgres_username
-    password: postgres_password
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update

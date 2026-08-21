@@ -27,7 +27,7 @@ public class EmployeeService {
         this.employeeMapper = employeeMapper;
     }
 
-    public Employee createEmployee(EmployeeRequest request) {
+    public EmployeeResponse createEmployee(EmployeeRequest request) {
 
         if(employeeRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException("Employee already exists with email: " + request.getEmail());
@@ -41,16 +41,18 @@ public class EmployeeService {
         employee.setDepartment(request.getDepartment());
         employee.setSalary(request.getSalary());
 
-        return employeeRepository.save(employee);
+        Employee createdEmployee = employeeRepository.save(employee);
+        return employeeMapper.toResponse(createdEmployee);
     }
 
-    public Employee getEmployeeById(Long id) {
+    public EmployeeResponse getEmployeeById(Long id) {
 
-        return employeeRepository.findById(id)
+        Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
+        return employeeMapper.toResponse(employee);
     }
 
-    public Employee updateEmployee(Long id, EmployeeUpdateRequest request) {
+    public EmployeeResponse updateEmployee(Long id, EmployeeUpdateRequest request) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
 
@@ -64,7 +66,9 @@ public class EmployeeService {
         employee.setDepartment(request.getDepartment());
         employee.setSalary(request.getSalary());
 
-        return employeeRepository.save(employee);
+        Employee updatedEmployee = employeeRepository.save(employee);
+
+        return employeeMapper.toResponse(updatedEmployee);
     }
 
     public void deleteEmployee(Long id) {

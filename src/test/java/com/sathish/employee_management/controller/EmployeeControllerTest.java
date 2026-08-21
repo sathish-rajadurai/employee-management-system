@@ -2,7 +2,7 @@ package com.sathish.employee_management.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sathish.employee_management.dto.EmployeeRequest;
-import com.sathish.employee_management.entity.Employee;
+import com.sathish.employee_management.dto.EmployeeResponse;
 import com.sathish.employee_management.exception.EmployeeNotFoundException;
 import com.sathish.employee_management.exception.GlobalExceptionHandler;
 import com.sathish.employee_management.service.EmployeeService;
@@ -55,7 +55,7 @@ public class EmployeeControllerTest {
         request.setDepartment("IT");
         request.setSalary(85000.0);
 
-        Employee employee = new Employee();
+        EmployeeResponse employee = new EmployeeResponse();
 
         employee.setId(1L);
         employee.setFirstName("Sathish");
@@ -101,7 +101,7 @@ public class EmployeeControllerTest {
     @Test
     void getEmployeeById_shouldReturn200() throws Exception {
 
-        Employee employee = new Employee();
+        EmployeeResponse employee = new EmployeeResponse();
 
         employee.setId(1L);
         employee.setFirstName("Sathish");

@@ -1,6 +1,7 @@
 package com.sathish.employee_management.service;
 
 import com.sathish.employee_management.dto.EmployeeRequest;
+import com.sathish.employee_management.dto.EmployeeResponse;
 import com.sathish.employee_management.entity.Employee;
 import com.sathish.employee_management.exception.DuplicateEmailException;
 import com.sathish.employee_management.exception.EmployeeNotFoundException;
@@ -50,11 +51,20 @@ class EmployeeServiceTest {
         savedEmployee.setDepartment("IT");
         savedEmployee.setSalary(85000.0);
 
+        EmployeeResponse employeeResponse = new EmployeeResponse(
+                1L,
+                "Sathish",
+                "Raj",
+                "sathish@test.com",
+                "IT",
+                85000.0
+        );
+
         when(employeeRepository.existsByEmail(request.getEmail())).thenReturn(false);
-
         when(employeeRepository.save(any(Employee.class))).thenReturn(savedEmployee);
+        when(employeeMapper.toResponse(savedEmployee)).thenReturn(employeeResponse);
 
-        Employee result = employeeService.createEmployee(request);
+        EmployeeResponse result = employeeService.createEmployee(request);
 
         assertEquals(1L, result.getId());
         assertEquals("sathish@test.com", result.getEmail());

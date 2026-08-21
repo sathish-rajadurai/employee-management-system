@@ -4,7 +4,6 @@ import com.sathish.employee_management.dto.EmployeeRequest;
 import com.sathish.employee_management.dto.EmployeeResponse;
 import com.sathish.employee_management.dto.EmployeeUpdateRequest;
 import com.sathish.employee_management.dto.PageResponse;
-import com.sathish.employee_management.entity.Employee;
 import com.sathish.employee_management.exception.InvalidSortFieldException;
 import com.sathish.employee_management.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +42,7 @@ public class EmployeeController {
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
+    public EmployeeResponse createEmployee(@Valid @RequestBody EmployeeRequest employeeRequest) {
         return employeeService.createEmployee(employeeRequest);
     }
 
@@ -52,7 +51,7 @@ public class EmployeeController {
             description = "Returns an employee using the employee ID"
     )
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id){
+    public EmployeeResponse getEmployeeById(@PathVariable Long id){
         return employeeService.getEmployeeById(id);
     }
 
@@ -61,7 +60,7 @@ public class EmployeeController {
             description = "Update employee using the employee ID"
     )
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id,
+    public EmployeeResponse updateEmployee(@PathVariable Long id,
                                    @Valid @RequestBody EmployeeUpdateRequest request){
         return employeeService.updateEmployee(id, request);
     }

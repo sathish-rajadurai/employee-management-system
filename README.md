@@ -156,6 +156,10 @@ employee_db
 ```text
 mvn spring-boot:run
 ```
+or
+```text
+mvn spring-boot:run "-Dspring-boot.run.arguments=--DB_USERNAME=postgres_user --DB_PASSWORD=postgres_pass"
+```
 
 ### Application runs on
 http://localhost:8080

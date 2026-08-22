@@ -4,6 +4,7 @@ import com.sathish.employee_management.dto.EmployeeRequest;
 import com.sathish.employee_management.dto.EmployeeResponse;
 import com.sathish.employee_management.dto.EmployeeUpdateRequest;
 import com.sathish.employee_management.dto.PageResponse;
+import com.sathish.employee_management.exception.InvalidPaginationException;
 import com.sathish.employee_management.exception.InvalidSortFieldException;
 import com.sathish.employee_management.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,11 +98,11 @@ public class EmployeeController {
         }
 
         if (page < 0) {
-            throw new InvalidSortFieldException("Page must be greater than or equal to 0");
+            throw new InvalidPaginationException("Page must be greater than or equal to 0");
         }
 
         if (size < 1 || size > 100) {
-            throw new InvalidSortFieldException("Size must be between 1 and 100");
+            throw new InvalidPaginationException("Size must be between 1 and 100");
         }
 
         Sort sort = sortDir.equalsIgnoreCase("desc")

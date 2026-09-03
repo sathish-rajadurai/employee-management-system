@@ -1,14 +1,11 @@
 spring:
   application:
     name: employee-management
-  datasource:
-    url: jdbc:postgresql://localhost:5432/practice
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true

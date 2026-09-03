@@ -25,12 +25,14 @@ public class EmployeeService {
     private static final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
     private final EmployeeRepository employeeRepository;
-
     private final EmployeeMapper employeeMapper;
+    private final AuditLogService auditLogService;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper,
+                           AuditLogService auditLogService) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.auditLogService = auditLogService;
     }
 
     public EmployeeResponse createEmployee(EmployeeRequest request) {
@@ -51,6 +53,7 @@ public class EmployeeService {
 
         Employee createdEmployee = employeeRepository.save(employee);
         log.info("Employee created successfully with ID: {}", createdEmployee.getId());
+        auditLogService.log("CREATE", "Employee", createdEmployee.getId());
         return employeeMapper.toResponse(createdEmployee);
     }
 
@@ -87,6 +90,7 @@ public class EmployeeService {
 
         Employee updatedEmployee = employeeRepository.save(employee);
         log.info("Employee updated successfully. ID: {}", updatedEmployee.getId());
+        auditLogService.log("UPDATE", "Employee", updatedEmployee.getId());
         return employeeMapper.toResponse(updatedEmployee);
     }
 
@@ -100,6 +104,7 @@ public class EmployeeService {
                 });
         employeeRepository.delete(employee);
         log.info("Employee deleted successfully. ID: {}", id);
+        auditLogService.log("DELETE", "Employee", id);
     }
 
     public PageResponse<EmployeeResponse> getEmployees(String search, String department,

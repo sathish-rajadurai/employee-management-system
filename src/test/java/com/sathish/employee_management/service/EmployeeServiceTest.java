@@ -29,6 +29,9 @@ class EmployeeServiceTest {
     @Mock
     private EmployeeMapper employeeMapper;
 
+    @Mock
+    private AuditLogService auditLogService;
+
     @InjectMocks
     private EmployeeService employeeService;
 

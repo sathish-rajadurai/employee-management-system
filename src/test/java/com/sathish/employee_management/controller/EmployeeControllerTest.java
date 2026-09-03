@@ -5,7 +5,9 @@ import com.sathish.employee_management.dto.EmployeeRequest;
 import com.sathish.employee_management.dto.EmployeeResponse;
 import com.sathish.employee_management.exception.EmployeeNotFoundException;
 import com.sathish.employee_management.exception.GlobalExceptionHandler;
+import com.sathish.employee_management.service.CustomUserDetailsService;
 import com.sathish.employee_management.service.EmployeeService;
+import com.sathish.employee_management.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -43,6 +45,12 @@ public class EmployeeControllerTest {
 
     @MockitoBean
     private EmployeeService employeeService;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private CustomUserDetailsService customUserDetailsService;
 
     @Test
     void createEmployee_shouldReturn201() throws Exception {

@@ -9,10 +9,12 @@ import com.sathish.employee_management.exception.DuplicateEmailException;
 import com.sathish.employee_management.exception.EmployeeNotFoundException;
 import com.sathish.employee_management.mapper.EmployeeMapper;
 import com.sathish.employee_management.repository.EmployeeRepository;
+import com.sathish.employee_management.specification.EmployeeSpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -100,20 +102,20 @@ public class EmployeeService {
         log.info("Employee deleted successfully. ID: {}", id);
     }
 
-    public PageResponse<EmployeeResponse> getEmployees(String search, Pageable pageable) {
+    public PageResponse<EmployeeResponse> getEmployees(String search, String department,
+           Double minSalary, Double maxSalary, Pageable pageable) {
 
-        log.info("Fetching employees. Search: '{}', Page: {}, Size: {}",
-                search,
+        log.info("Fetching employees. Search: '{}', department: {}, minSalary: {}, maxSalary:{}, Page: {}, Size: {}",
+                search, department, minSalary, maxSalary,
                 pageable.getPageNumber(),
                 pageable.getPageSize());
-        Page<Employee> employeePage;
-        if (search == null || search.isBlank()){
-            log.info("Fetching all employees without search");
-            employeePage = employeeRepository.findAll(pageable);
-        } else {
-            log.info("Searching employees with keyword: '{}'", search.trim());
-            employeePage = employeeRepository.searchEmployees(search.trim(), pageable);
-        }
+
+        Specification<Employee> specification = Specification.where(EmployeeSpecification.hasSearch(search))
+                .and(EmployeeSpecification.hasDepartment(department))
+                .and(EmployeeSpecification.salaryGreaterThanOrEqual(minSalary))
+                .and(EmployeeSpecification.salaryLessThanOrEqual(maxSalary));
+
+        Page<Employee> employeePage = employeeRepository.findAll(specification, pageable);
 
         List<EmployeeResponse> employees =
                 employeePage.getContent()

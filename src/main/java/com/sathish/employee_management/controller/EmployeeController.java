@@ -86,14 +86,16 @@ public class EmployeeController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
-            @RequestParam(required = false) String search){
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String department,
+            @RequestParam(required = false) Double minSalary,
+            @RequestParam(required = false) Double maxSalary){
 
         if(!ALLOWED_SORT_FIELDS.contains(sortBy)){
             throw new InvalidSortFieldException("Invalid sort field: " + sortBy);
         }
 
-        if(!sortDir.equalsIgnoreCase("asc")
-                && !sortDir.equalsIgnoreCase("desc")){
+        if(!sortDir.equalsIgnoreCase("asc") && !sortDir.equalsIgnoreCase("desc")){
             throw new InvalidSortFieldException("Invalid sort direction: " + sortDir);
         }
 
@@ -105,9 +107,21 @@ public class EmployeeController {
             throw new InvalidPaginationException("Size must be between 1 and 100");
         }
 
+        if (minSalary != null && minSalary < 0) {
+            throw new InvalidPaginationException("Minimum salary cannot be negative");
+        }
+
+        if (maxSalary != null && maxSalary < 0) {
+            throw new InvalidPaginationException("Maximum salary cannot be negative");
+        }
+
+        if (minSalary != null && maxSalary != null && minSalary > maxSalary) {
+            throw new InvalidPaginationException("Minimum salary cannot be greater than maximum salary");
+        }
+
         Sort sort = sortDir.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return employeeService.getEmployees(search, pageable);
+        return employeeService.getEmployees(search, department, minSalary, maxSalary, pageable);
     }
 }

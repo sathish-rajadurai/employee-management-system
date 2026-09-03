@@ -76,7 +76,7 @@ public class EmployeeControllerTest {
                 .thenReturn(employee);
 
         mockMvc.perform(
-                post("/api/employees")
+                post("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -99,7 +99,7 @@ public class EmployeeControllerTest {
         request.setSalary(-100.0);
 
         mockMvc.perform(
-                        post("/api/employees")
+                        post("/api/v1/employees")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                 )
@@ -121,7 +121,7 @@ public class EmployeeControllerTest {
         when(employeeService.getEmployeeById(1L))
                 .thenReturn(employee);
 
-        mockMvc.perform(get("/api/employees/1"))
+        mockMvc.perform(get("/api/v1/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.firstName").value("Sathish"))
@@ -140,7 +140,7 @@ public class EmployeeControllerTest {
                 );
 
         mockMvc.perform(
-                        get("/api/employees/999")
+                        get("/api/v1/employees/999")
                 )
                 .andExpect(status().isNotFound())
                 .andExpect(
